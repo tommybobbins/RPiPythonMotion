@@ -2,8 +2,9 @@ RPiPythonMotion
 ===============
 
 Modifications of brainflakes' sterling work implementing motion in Python
-# original script by brainflakes, improved by pageauc, peewee2 and Kesthal
-# www.raspberrypi.org/phpBB3/viewtopic.php?f=43&t=45235
+original script by brainflakes, improved by pageauc, peewee2 and Kesthal
+
+http://www.raspberrypi.org/phpBB3/viewtopic.php?f=43&t=45235
 
 Use raspi-config to enable camera support if necessary:
     sudo raspi-config
