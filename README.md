@@ -31,3 +31,20 @@ Enable the init script:
 
     sudo insserv pymotion
     sudo /etc/init.d/pymotion start
+
+Alternate script:
+JBeale and waveform80 have written a very fast implementation which produces B&W images very quickly.
+http://www.raspberrypi.org/phpBB3/viewtopic.php?p=470488#p470488
+Stop pymotion and install the prereqs:
+
+    sudo /etc/init.d/pymotion stop
+
+    sudo apt-get install python-opencv python-numpy
+
+Copy this into place over /usr/local/bin/picam.py:
+
+    sudo cp purepicam.py /usr/local/bin/picam.py
+
+Restart pymotion:
+
+    sudo /etc/init.d/pymotion start
