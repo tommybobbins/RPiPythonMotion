@@ -37,7 +37,8 @@ avgmax = 3        # long-term average of maximum-pixel-change-value
 tfactor = 2       # threshold above max.average diff per frame for motion detect
 picHoldoff = 0.2  # minimum interval (seconds) between saving images
 fupdate = 100     # report debug data every this many frames
-logfile = "cam-log.csv"
+motionpath = "/home/pi/MOTION/"
+logfile = motionpath + "cam-log.csv"
 
 np.set_printoptions(precision=2)
 with io.open(logfile, 'a') as f:
@@ -47,7 +48,7 @@ with io.open(logfile, 'a') as f:
 
     daytime = datetime.datetime.now().strftime("%y%m%d-%H_%M_%S.%f")
     daytime = daytime[:-3]  # remove last three digits (xxx microseconds)
-    print ("# Start at %s" % str(datetime.datetime.now()))
+#    print ("# Start at %s" % str(datetime.datetime.now()))
 
     stream = io.BytesIO()
     with picamera.PiCamera() as camera:
@@ -75,7 +76,9 @@ with io.open(logfile, 'a') as f:
             image = image.reshape((fheight, fwidth))[:height, :width].astype(np.float32)
             frames += 1
             if (frames % fupdate) == 0:
-                print("%s,  %03d max = %5.3f, avg = %5.3f" % (str(datetime.datetime.now()), frames, max, avgmax))
+                pstr=("%s,  %03d max = %5.3f, avg = %5.3f" % (str(datetime.datetime.now()), frames, max, avgmax))
+                f.write(pstr)
+                f.flush()
             if first_frame:
                 first_frame = False
                 # No need to extract green channel anymore as we've only got a
@@ -106,10 +109,10 @@ with io.open(logfile, 'a') as f:
                     daytime = daytime[:-3]  # remove last three digits (xxx microseconds)
                     daytime = daytime + "_" + str(countPixels)
                     tstr = ("%s,  %04.1f, %6.3f, %03d\n" % (daytime, max, interval, countPixels))
-                    print (tstr, end='')
+#                    print (tstr, end='')
                     f.write(tstr)
                     f.flush()
                     # Don't write images more quickly than picHoldoff interval
                     if interval > picHoldoff:
-                        imgName = daytime + ".jpg"
+                        imgName = motionpath + daytime + ".jpg"
                         cv2.imwrite(imgName, image)  # save as an image
