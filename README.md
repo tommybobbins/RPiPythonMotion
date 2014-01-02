@@ -32,7 +32,9 @@ Enable the init script:
     sudo insserv pymotion
     sudo /etc/init.d/pymotion start
 
-Alternate script:
+Alternate (better) script
+=========================
+
 JBeale and waveform80 have written a very fast implementation which produces B&W images very quickly.
 http://www.raspberrypi.org/phpBB3/viewtopic.php?p=470488#p470488
 Stop pymotion and install the prereqs:
@@ -47,7 +49,7 @@ Install the picamera Pure Python code:
     cd picamera
     sudo make install
 
-Copy this into place over /usr/local/bin/picam.py:
+Copy the new Python script in place over /usr/local/bin/picam.py:
 
     cd /home/pi/RPiPythonMotion
     sudo cp purepicam.py /usr/local/bin/picam.py
