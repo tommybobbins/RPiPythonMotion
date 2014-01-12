@@ -16,6 +16,8 @@ Install the prerequisites:
 
 Copy the init script into place
 
+    git clone  "https://github.com/tommybobbins/RPiPythonMotion"
+    cd RPIPythonMotion
     sudo cp pymotion /etc/init.d/pymotion
     sudo cp default_pymotion /etc/default/pymotion
 
@@ -35,7 +37,7 @@ Enable the init script:
 Alternate (better) script
 =========================
 
-JBeale and waveform80 have written a very fast implementation which produces B&W images very quickly.
+JBeale and waveform80 have written a very fast implementation which produces B&W images very quickly. Assuming you have done the above steps (namely putting the init script in place, and running insserv).:
 http://www.raspberrypi.org/phpBB3/viewtopic.php?p=470488#p470488
 Stop pymotion and install the prereqs:
 
