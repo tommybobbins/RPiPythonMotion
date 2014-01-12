@@ -40,14 +40,7 @@ http://www.raspberrypi.org/phpBB3/viewtopic.php?p=470488#p470488
 Stop pymotion and install the prereqs:
 
     sudo /etc/init.d/pymotion stop
-    sudo apt-get install python-opencv python-numpy
-
-Install the picamera Pure Python code: 
-
-    cd /home/pi
-    git clone "https://github.com/waveform80/picamera"
-    cd picamera
-    sudo make install
+    sudo apt-get install python-opencv python-numpy python-picamera
 
 Copy the new Python script in place over /usr/local/bin/picam.py:
 
