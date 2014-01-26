@@ -22,7 +22,10 @@ def detect_motion(camera):
         # Compare current_image to prior_image to detect motion. This is
         diff = ImageChops.difference(current_image, prior_image)
         minimum_difference = diff.getbbox()
-        print (minimum_difference)
+        if minimum_difference:
+            x0, y0, width, height = img.getbbox()
+            area_difference = width * height
+            print (area_difference)
         result = random.randint(0, 10) == 0
         # Once motion detection is done, make the prior image the current
         prior_image = current_image
