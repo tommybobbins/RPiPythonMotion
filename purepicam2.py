@@ -1,9 +1,12 @@
+#!/usr/bin/python
 import io
 import random
 import picamera
 from PIL import Image, ImageChops
 import io, os, time, datetime, picamera, cv2
 import numpy as np
+import math, operator
+camera_resolution = [1280,720]
 # Taken from waveform80/Dave Jones' git repository:
 # https://github.com/waveform80/picamera/blob/master/docs/recipes2.rst
 
@@ -20,18 +23,25 @@ def detect_motion(camera):
     else:
         current_image = Image.open(stream)
         # Compare current_image to prior_image to detect motion. This is
+
         diff = ImageChops.difference(current_image, prior_image)
-        minimum_difference = diff.getbbox()
-        if minimum_difference:
-            x0, y0, width, height = img.getbbox()
-            area_difference = width * height
-            print (area_difference)
-        result = random.randint(0, 10) == 0
+        h = diff.histogram()
+        sq = (value*(idx**2) for idx, value in enumerate(h))
+        sum_of_squares = sum(sq)
+        rms = math.sqrt(sum_of_squares/float(current_image.size[0] * current_image.size[1]))
+#        print ("Image size = %i, %i" % (current_image.size[0],current_image.size[1]))
+#        rms = math.sqrt(sum_of_squares/float(camera_resolution[0] * camera_resolution[1]))
+#        print rms
+        if (rms > 600):
+           image_found = 1
+        else:
+           image_found = 0
+#        result = random.randint(0, 10) == 0
         # Once motion detection is done, make the prior image the current
         prior_image = current_image
-        return result
+        return image_found
 
-def write_before(stream):
+def write_video(stream):
     # Write the entire content of the circular buffer to disk. No need to
     # lock the stream here as we're definitely not writing to it
     # simultaneously
@@ -50,7 +60,7 @@ def write_before(stream):
     stream.truncate()
 
 with picamera.PiCamera() as camera:
-    camera.resolution = (1280, 720)
+#    camera.resolution = (camera_resolution[0], camera_resolution[1])
     stream = picamera.PiCameraCircularIO(camera, seconds=10)
     camera.start_recording(stream, format='h264')
     try:
