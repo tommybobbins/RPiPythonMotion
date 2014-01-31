@@ -45,7 +45,9 @@ def write_video(stream):
     # Write the entire content of the circular buffer to disk. No need to
     # lock the stream here as we're definitely not writing to it
     # simultaneously
-    with io.open('before.h264', 'wb') as output:
+    filename = time.strftime("output%Y%m%d_%H%M%S.h264")
+    print ("Filename = %s" % filename)
+    with io.open(filename, 'wb') as output:
         for frame in stream.frames:
             if frame.header:
                 stream.seek(frame.position)
