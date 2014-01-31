@@ -46,7 +46,7 @@ def write_video(stream):
     # lock the stream here as we're definitely not writing to it
     # simultaneously
     filename = time.strftime("output%Y%m%d_%H%M%S.h264")
-    print ("Filename = %s" % filename)
+#    print ("Filename = %s" % filename)
     with io.open(filename, 'wb') as output:
         for frame in stream.frames:
             if frame.header:
@@ -69,7 +69,7 @@ with picamera.PiCamera() as camera:
         while True:
             camera.wait_recording(1)
             if detect_motion(camera):
-                print('Motion detected!')
+#                print('Motion detected!')
                 # As soon as we detect motion, split the recording to
                 # record the frames "after" motion
                 camera.split_recording('after.h264')
@@ -79,7 +79,7 @@ with picamera.PiCamera() as camera:
                 # recording back to the in-memory circular buffer
                 while detect_motion(camera):
                     camera.wait_recording(1)
-                print('Motion stopped!')
+#                print('Motion stopped!')
                 camera.split_recording(stream)
     finally:
         camera.stop_recording()
