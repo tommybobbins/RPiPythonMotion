@@ -13,7 +13,7 @@ camera_resolution = [1280,720]
 # Taken from waveform80/Dave Jones' git repository:
 # https://github.com/waveform80/picamera/blob/master/docs/recipes2.rst
 
-maximum_rms = 600
+maximum_rms = 580
 prior_image = None
 
 def detect_motion(camera):
@@ -49,7 +49,7 @@ def write_video(stream):
     # Write the entire content of the circular buffer to disk. No need to
     # lock the stream here as we're definitely not writing to it
     # simultaneously
-    filename = time.strftime("output%Y%m%d_%H%M%S.h264")
+    filename = time.strftime("/home/pi/MOTION/output%Y%m%d_%H%M%S.h264")
 #    print ("Filename = %s" % filename)
     with io.open(filename, 'wb') as output:
         for frame in stream.frames:
@@ -77,7 +77,7 @@ with picamera.PiCamera() as camera:
                 logging.info ('Motion detected!')
                  # As soon as we detect motion, split the recording to
                  # record the frames "after" motion
-                camera.split_recording('after.h264')
+                camera.split_recording('/home/pi/MOTION/after.h264')
                 # Write the 10 seconds "before" motion to disk as well
                 write_video(stream)
                 # Wait until motion is no longer detected, then split
