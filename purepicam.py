@@ -6,10 +6,14 @@ from PIL import Image, ImageChops
 import io, os, time, datetime, picamera, cv2
 import numpy as np
 import math, operator
+import logging
+dt = datetime.datetime.now()
+logging.basicConfig(filename='/home/pi/MOTION/securitah_%i_%i_%i.log' %(dt.year, dt.month, dt.day),level=logging.INFO)
 camera_resolution = [1280,720]
 # Taken from waveform80/Dave Jones' git repository:
 # https://github.com/waveform80/picamera/blob/master/docs/recipes2.rst
 
+maximum_rms = 600
 prior_image = None
 
 def detect_motion(camera):
@@ -31,9 +35,9 @@ def detect_motion(camera):
         rms = math.sqrt(sum_of_squares/float(current_image.size[0] * current_image.size[1]))
 #        print ("Image size = %i, %i" % (current_image.size[0],current_image.size[1]))
 #        rms = math.sqrt(sum_of_squares/float(camera_resolution[0] * camera_resolution[1]))
-#        print rms
-        if (rms > 600):
+        if (rms > maximum_rms):
            image_found = 1
+           logging.info ("Recording. Image variation = %i" % rms)
         else:
            image_found = 0
 #        result = random.randint(0, 10) == 0
@@ -70,6 +74,7 @@ with picamera.PiCamera() as camera:
             camera.wait_recording(1)
             if detect_motion(camera):
 #                print('Motion detected!')
+                 logging.info ("Motion detected!")
                 # As soon as we detect motion, split the recording to
                 # record the frames "after" motion
                 camera.split_recording('after.h264')
@@ -80,6 +85,7 @@ with picamera.PiCamera() as camera:
                 while detect_motion(camera):
                     camera.wait_recording(1)
 #                print('Motion stopped!')
+                 logging.info ("Motion stopped!")
                 camera.split_recording(stream)
     finally:
         camera.stop_recording()
