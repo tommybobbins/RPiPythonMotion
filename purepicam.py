@@ -13,7 +13,7 @@ camera_resolution = [1280,720]
 # Taken from waveform80/Dave Jones' git repository:
 # https://github.com/waveform80/picamera/blob/master/docs/recipes2.rst
 
-maximum_rms = 580
+maximum_rms = 585
 prior_image = None
 
 def detect_motion(camera):
