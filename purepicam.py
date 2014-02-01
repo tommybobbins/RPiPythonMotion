@@ -74,9 +74,9 @@ with picamera.PiCamera() as camera:
             camera.wait_recording(1)
             if detect_motion(camera):
 #                print('Motion detected!')
-                 logging.info ("Motion detected!")
-                # As soon as we detect motion, split the recording to
-                # record the frames "after" motion
+                logging.info ('Motion detected!')
+                 # As soon as we detect motion, split the recording to
+                 # record the frames "after" motion
                 camera.split_recording('after.h264')
                 # Write the 10 seconds "before" motion to disk as well
                 write_video(stream)
@@ -85,7 +85,7 @@ with picamera.PiCamera() as camera:
                 while detect_motion(camera):
                     camera.wait_recording(1)
 #                print('Motion stopped!')
-                 logging.info ("Motion stopped!")
+                logging.info ("Motion stopped!")
                 camera.split_recording(stream)
     finally:
         camera.stop_recording()
