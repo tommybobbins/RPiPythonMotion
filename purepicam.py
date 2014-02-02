@@ -37,7 +37,8 @@ def detect_motion(camera):
 #        rms = math.sqrt(sum_of_squares/float(camera_resolution[0] * camera_resolution[1]))
         if (rms > maximum_rms):
            image_found = 1
-           logging.info ("Recording. Image variation = %i" % rms)
+           dt = datetime.datetime.now()
+           logging.info ("%s Recording. Image variation = %i" % (dt,rms))
         else:
            image_found = 0
 #        result = random.randint(0, 10) == 0
@@ -49,7 +50,7 @@ def write_video(stream):
     # Write the entire content of the circular buffer to disk. No need to
     # lock the stream here as we're definitely not writing to it
     # simultaneously
-    filename = time.strftime("/home/pi/MOTION/output%Y%m%d_%H%M%S.h264")
+    filename = time.strftime("/home/pi/MOTION/before%Y%m%d_%H%M%S.h264")
 #    print ("Filename = %s" % filename)
     with io.open(filename, 'wb') as output:
         for frame in stream.frames:
@@ -77,7 +78,8 @@ with picamera.PiCamera() as camera:
                 logging.info ('Motion detected!')
                  # As soon as we detect motion, split the recording to
                  # record the frames "after" motion
-                camera.split_recording('/home/pi/MOTION/after.h264')
+                filename = time.strftime("/home/pi/MOTION/after%Y%m%d_%H%M%S.h264")
+                camera.split_recording(filename)
                 # Write the 10 seconds "before" motion to disk as well
                 write_video(stream)
                 # Wait until motion is no longer detected, then split
