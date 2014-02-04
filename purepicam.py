@@ -2,6 +2,7 @@
 import io
 import random
 import picamera
+camera_rotation = 0
 from PIL import Image, ImageChops
 import io, os, time, datetime, picamera, cv2
 import numpy as np
@@ -19,6 +20,7 @@ prior_image = None
 def detect_motion(camera):
     global prior_image
     stream = io.BytesIO()
+    camera.rotation = camera_rotation
     camera.capture(stream, format='jpeg', use_video_port=True)
     stream.seek(0)
     if prior_image is None:
@@ -39,6 +41,7 @@ def detect_motion(camera):
            image_found = 1
            dt = datetime.datetime.now()
            logging.info ("%s Recording. Image variation = %i" % (dt,rms))
+#           print ("%s Recording. Image variation = %i" % (dt,rms))
         else:
            image_found = 0
 #        result = random.randint(0, 10) == 0
@@ -69,6 +72,7 @@ def write_video(stream):
 with picamera.PiCamera() as camera:
 #    camera.resolution = (camera_resolution[0], camera_resolution[1])
     stream = picamera.PiCameraCircularIO(camera, seconds=10)
+    camera.rotation = camera_rotation
     camera.start_recording(stream, format='h264')
     try:
         while True:
