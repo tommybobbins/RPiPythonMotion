@@ -10,7 +10,7 @@ import math, operator
 import logging
 dt = datetime.datetime.now()
 logging.basicConfig(filename='/home/pi/MOTION/securitah_%i_%i_%i.log' %(dt.year, dt.month, dt.day),level=logging.INFO)
-camera_resolution = [1280,720]
+camera_resolution = [2592,1944]
 # Taken from waveform80/Dave Jones' git repository:
 # https://github.com/waveform80/picamera/blob/master/docs/recipes2.rst
 
@@ -41,11 +41,11 @@ def detect_motion(camera):
         if (rms > maximum_rms):
            image_found = 1
            logging.info ("%s Recording. Image variation = %i" % (dt,rms))
-#           print ("%s Recording. Image variation = %i" % (dt,rms))
+           print ("%s Recording. Image variation = %i" % (dt,rms))
         else:
            image_found = 0
 #           logging.info ("%s Not Recording. Image variation = %i" % (dt,rms))
-#           print ("%s Not Recording. Image variation = %i" % (dt,rms))
+           print ("%s Not Recording. Image variation = %i" % (dt,rms))
           
 #        result = random.randint(0, 10) == 0
         # Once motion detection is done, make the prior image the current
@@ -76,7 +76,7 @@ with picamera.PiCamera() as camera:
     camera.resolution = (camera_resolution[0], camera_resolution[1])
     stream = picamera.PiCameraCircularIO(camera, seconds=10)
     camera.rotation = camera_rotation
-    camera.start_recording(stream, format='h264')
+    camera.start_recording(stream, format='h264',resize=(768,1024))
     try:
         while True:
             camera.wait_recording(1)
