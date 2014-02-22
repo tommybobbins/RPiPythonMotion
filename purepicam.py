@@ -14,12 +14,13 @@ camera_resolution = [1280,720]
 # Taken from waveform80/Dave Jones' git repository:
 # https://github.com/waveform80/picamera/blob/master/docs/recipes2.rst
 
-maximum_rms = 580
+maximum_rms = 577
 prior_image = None
 
 def detect_motion(camera):
     global prior_image
     stream = io.BytesIO()
+    camera.resolution = (camera_resolution[0], camera_resolution[1])
     camera.rotation = camera_rotation
     camera.capture(stream, format='jpeg', use_video_port=True)
     stream.seek(0)
@@ -73,7 +74,7 @@ def write_video(stream):
     stream.truncate()
 
 with picamera.PiCamera() as camera:
-#    camera.resolution = (camera_resolution[0], camera_resolution[1])
+    camera.resolution = (camera_resolution[0], camera_resolution[1])
     stream = picamera.PiCameraCircularIO(camera, seconds=10)
     camera.rotation = camera_rotation
     camera.start_recording(stream, format='h264')
