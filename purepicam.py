@@ -20,7 +20,6 @@ prior_image = None
 def detect_motion(camera):
     global prior_image
     stream = io.BytesIO()
-    camera.resolution = (camera_resolution[0], camera_resolution[1])
     camera.rotation = camera_rotation
     camera.capture(stream, format='jpeg', use_video_port=True)
     stream.seek(0)
