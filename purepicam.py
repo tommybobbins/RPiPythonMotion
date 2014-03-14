@@ -12,7 +12,8 @@ import datetime
 dt = datetime.datetime.now()
 logging.basicConfig(filename='/home/pi/MOTION/securitah_%i_%i_%i.log' %(dt.year, dt.month, dt.day),level=logging.INFO)
 #camera_resolution = [2592,1944]
-camera_resolution = [2400,1800]
+#camera_resolution = [2400,1800]
+camera_resolution = [1920,1080]
 resize_resolution = [300, 400] 
 # Taken from waveform80/Dave Jones' git repository:
 # https://github.com/waveform80/picamera/blob/master/docs/recipes2.rst
@@ -23,13 +24,15 @@ prior_image = None
 def detect_motion(camera):
     global prior_image
     stream = io.BytesIO()
-    camera.rotation = camera_rotation
+#    camera.resolution = (camera_resolution[0], camera_resolution[1])
     camera.capture(stream, format='jpeg', use_video_port=True)
     stream.seek(0)
     if prior_image is None:
         prior_image = Image.open(stream)
         return False
     else:
+        # Debug
+#        dt1 = datetime.datetime.now()
         current_image = Image.open(stream)
         # Compare current_image to prior_image to detect motion. This is
 
@@ -40,10 +43,15 @@ def detect_motion(camera):
         rms = math.sqrt(sum_of_squares/float(current_image.size[0] * current_image.size[1]))
 #        print ("Image size = %i, %i" % (current_image.size[0],current_image.size[1]))
 #        rms = math.sqrt(sum_of_squares/float(camera_resolution[0] * camera_resolution[1]))
-        dt = datetime.datetime.now()
+
+#        Debug
+#        dt2 = datetime.datetime.now()
+#        elapsedTime = dt2 - dt1
+#        logging.info ("Calc took: %s" % elapsedTime)
+#        current_image.save('/home/pi/MOTION/sampler.jpg')
         if (rms > maximum_rms):
            image_found = 1
-           logging.info ("%s Recording. Image variation = %i" % (dt,rms))
+           logging.info ("%s Recording. Image variation = %i." % (dt,rms))
 #           print ("%s Recording. Image variation = %i" % (dt,rms))
         else:
            image_found = 0
@@ -81,6 +89,8 @@ with picamera.PiCamera() as camera:
     camera.start_recording(stream, format='h264',resize=(resize_resolution[0],resize_resolution[1]))
     try:
         while True:
+#            dt = datetime.datetime.now()
+#            print ("Mainloop %s" % dt)
             camera.wait_recording(1)
             if detect_motion(camera):
 #                print('Motion detected!')
