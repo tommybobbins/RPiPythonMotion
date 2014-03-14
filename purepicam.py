@@ -11,8 +11,9 @@ import logging
 import datetime
 dt = datetime.datetime.now()
 logging.basicConfig(filename='/home/pi/MOTION/securitah_%i_%i_%i.log' %(dt.year, dt.month, dt.day),level=logging.INFO)
-camera_resolution = [2592,1944]
-#camera_resolution = [2400,1800]
+#camera_resolution = [2592,1944]
+camera_resolution = [2400,1800]
+resize_resolution = [300, 400] 
 # Taken from waveform80/Dave Jones' git repository:
 # https://github.com/waveform80/picamera/blob/master/docs/recipes2.rst
 
@@ -77,7 +78,7 @@ with picamera.PiCamera() as camera:
     camera.resolution = (camera_resolution[0], camera_resolution[1])
     stream = picamera.PiCameraCircularIO(camera, seconds=10)
     camera.rotation = camera_rotation
-    camera.start_recording(stream, format='h264',resize=(972,1296))
+    camera.start_recording(stream, format='h264',resize=(resize_resolution[0],resize_resolution[1]))
     try:
         while True:
             camera.wait_recording(1)
